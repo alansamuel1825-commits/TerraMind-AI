@@ -20,7 +20,7 @@ const findImage = (id: string) => {
 }
 
 export const headBoyCandidates: Candidate[] = [
-  { id: 'hb1', name: 'James Smith', ...findImage('candidate-hb-1') },
+  { id: 'hb1', name: 'Alan', ...findImage('candidate-hb-1') },
   { id: 'hb2', name: 'Michael Johnson', ...findImage('candidate-hb-2') },
   { id: 'hb3', name: 'Robert Williams', ...findImage('candidate-hb-3') },
   { id: 'hb4', name: 'David Brown', ...findImage('candidate-hb-4') },

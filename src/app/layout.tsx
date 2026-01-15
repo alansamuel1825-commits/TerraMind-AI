@@ -4,8 +4,8 @@ import { Toaster } from '@/components/ui/toaster';
 import Header from '@/components/Header';
 
 export const metadata: Metadata = {
-  title: 'VoteChain',
-  description: 'Online Voting System',
+  title: 'The Study - School Elections',
+  description: 'Online Voting System for The Study International School',
 };
 
 export default function RootLayout({
