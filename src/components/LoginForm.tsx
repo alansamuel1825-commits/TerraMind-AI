@@ -54,6 +54,15 @@ export default function LoginForm() {
       });
       return;
     }
+    
+    if (values.password !== "thestudy123") {
+      toast({
+        title: "Invalid Credentials",
+        description: "Please check your School ID and password.",
+        variant: "destructive",
+      });
+      return;
+    }
 
     // On successful "login", redirect to the voting page.
     router.push(`/vote?studentId=${values.studentId}`);
