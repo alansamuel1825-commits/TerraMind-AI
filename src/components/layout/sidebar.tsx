@@ -3,7 +3,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { 
   LayoutDashboard, 
@@ -22,105 +22,154 @@ import {
   ChevronLeft,
   ChevronRight,
   Globe,
-  ShieldCheck
+  ShieldCheck,
+  Tv
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 const navItems = [
-  { group: "Core", items: [
-    { href: "/", label: "Dashboard", icon: LayoutDashboard },
-    { href: "/executive", label: "Executive Intelligence", icon: ShieldCheck },
-    { href: "/agri", label: "Agriculture Intelligence", icon: Sprout },
-    { href: "/circular", label: "Circular Economy", icon: Recycle },
-    { href: "/energy", label: "Green Energy", icon: Zap },
-    { href: "/smart-city", label: "Smart City", icon: Building2 },
+  { group: "Core Intelligence", items: [
+    { href: "/", label: "Overview", icon: LayoutDashboard },
+    { href: "/executive", label: "Strategic Hub", icon: ShieldCheck },
+    { href: "/agri", label: "Agriculture", icon: Sprout },
+    { href: "/circular", label: "Circular Waste", icon: Recycle },
+    { href: "/energy", label: "Energy Grid", icon: Zap },
+    { href: "/smart-city", label: "Digital Twin", icon: Building2 },
   ]},
-  { group: "Analysis", items: [
-    { href: "/climate", label: "Climate Intelligence", icon: CloudRain },
-    { href: "/health", label: "Public Health", icon: HeartPulse },
-    { href: "/environment", label: "Environment", icon: Leaf },
-    { href: "/analytics", label: "Analytics", icon: BarChart3 },
+  { group: "Deep Analysis", items: [
+    { href: "/health", label: "Bio-Health", icon: HeartPulse },
+    { href: "/environment", label: "Ecosystems", icon: Leaf },
+    { href: "/analytics", label: "Global Trends", icon: BarChart3 },
   ]},
-  { group: "System", items: [
-    { href: "/ai", label: "AI Assistant", icon: Sparkles },
-    { href: "/reports", label: "Reports", icon: FileText },
-    { href: "/docs", label: "Documentation", icon: BookOpen },
-    { href: "/settings", label: "Settings", icon: Settings },
+  { group: "Collaboration", items: [
+    { href: "/ai", label: "Neural Assistant", icon: Sparkles },
+    { href: "/reports", label: "Audit Logs", icon: FileText },
+    { href: "/settings", label: "System Config", icon: Settings },
   ]}
 ];
 
 export default function Sidebar() {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
+  const [isPresentation, setIsPresentation] = useState(false);
+
+  useEffect(() => {
+    const checkPresentation = () => {
+      setIsPresentation(document.body.classList.contains('presentation-mode'));
+    };
+    checkPresentation();
+    const observer = new MutationObserver(checkPresentation);
+    observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+    return () => observer.disconnect();
+  }, []);
+
+  if (isPresentation) return null;
 
   return (
-    <aside className={cn(
-      "relative h-screen bg-card border-r transition-all duration-300 flex flex-col z-40",
-      collapsed ? "w-20" : "w-64"
-    )}>
-      <div className="p-6 flex items-center gap-3">
-        <div className="bg-primary rounded-lg p-1.5">
-          <Globe className="h-6 w-6 text-primary-foreground" />
+    <TooltipProvider delayDuration={0}>
+      <aside className={cn(
+        "relative h-screen bg-card border-r transition-all duration-500 ease-in-out flex flex-col z-40 premium-shadow",
+        collapsed ? "w-20" : "w-64"
+      )}>
+        <div className="p-6 flex items-center gap-3">
+          <div className="bg-primary rounded-xl p-2 shadow-lg shadow-primary/20 animate-float">
+            <Globe className="h-6 w-6 text-primary-foreground" />
+          </div>
+          {!collapsed && (
+            <div className="flex flex-col animate-in fade-in slide-in-from-left-2 duration-500">
+              <h1 className="text-lg font-black tracking-tighter uppercase">TerraMind AI</h1>
+              <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">Resilience Layer</p>
+            </div>
+          )}
         </div>
-        {!collapsed && (
-          <div className="flex flex-col">
-            <h1 className="text-xl font-bold tracking-tight">TerraMind AI</h1>
-            <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-semibold">Intelligence Dashboard</p>
-          </div>
-        )}
-      </div>
 
-      <Button
-        variant="ghost"
-        size="icon"
-        className="absolute -right-3 top-20 bg-background border shadow-sm rounded-full h-6 w-6"
-        onClick={() => setCollapsed(!collapsed)}
-      >
-        {collapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
-      </Button>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="absolute -right-3 top-20 bg-background border shadow-xl rounded-full h-7 w-7 z-50 hover:bg-primary hover:text-white transition-all"
+          onClick={() => setCollapsed(!collapsed)}
+          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+        >
+          {collapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
+        </Button>
 
-      <div className="flex-1 overflow-y-auto px-4 py-4 space-y-6">
-        {navItems.map((group) => (
-          <div key={group.group}>
-            {!collapsed && <p className="text-xs font-semibold text-muted-foreground mb-3 px-2 uppercase tracking-wider">{group.group}</p>}
-            <nav className="space-y-1">
-              {group.items.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={cn(
-                    "flex items-center gap-3 px-3 py-2 rounded-md transition-all group relative",
-                    pathname === item.href 
-                      ? "bg-primary/10 text-primary" 
-                      : "text-muted-foreground hover:bg-secondary hover:text-foreground"
-                  )}
-                >
-                  <item.icon className={cn("h-5 w-5 shrink-0 transition-transform group-hover:scale-110", pathname === item.href ? "text-primary" : "")} />
-                  {!collapsed && <span className="text-sm font-medium whitespace-nowrap">{item.label}</span>}
-                  {collapsed && (
-                    <div className="absolute left-full ml-4 px-2 py-1 bg-popover text-popover-foreground text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity border shadow-md z-50 whitespace-nowrap">
-                      {item.label}
-                    </div>
-                  )}
-                </Link>
-              ))}
-            </nav>
-          </div>
-        ))}
-      </div>
-
-      <div className="p-4 border-t">
-        <div className={cn(
-          "bg-secondary/50 rounded-xl p-3 transition-all",
-          collapsed ? "opacity-0" : "opacity-100"
-        )}>
-          <div className="flex items-center gap-2 mb-2">
-            <Sparkles className="h-4 w-4 text-primary" />
-            <span className="text-xs font-bold">Pro Features</span>
-          </div>
-          <p className="text-[10px] text-muted-foreground leading-relaxed">Unlock advanced climate simulations and real-time GIS layers.</p>
+        <div className="flex-1 overflow-y-auto px-4 py-4 space-y-8 scrollbar-none">
+          {navItems.map((group) => (
+            <div key={group.group}>
+              {!collapsed && (
+                <p className="text-[10px] font-black text-muted-foreground mb-4 px-2 uppercase tracking-[0.2em] opacity-60">
+                  {group.group}
+                </p>
+              )}
+              <nav className="space-y-1.5">
+                {group.items.map((item) => {
+                  const isActive = pathname === item.href;
+                  return (
+                    <Tooltip key={item.href} disableHoverableContent={!collapsed}>
+                      <TooltipTrigger asChild>
+                        <Link
+                          href={item.href}
+                          className={cn(
+                            "flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all group relative",
+                            isActive 
+                              ? "bg-primary text-white shadow-lg shadow-primary/20" 
+                              : "text-muted-foreground hover:bg-secondary hover:text-foreground"
+                          )}
+                        >
+                          <item.icon className={cn(
+                            "h-5 w-5 shrink-0 transition-transform duration-300 group-hover:scale-110",
+                            isActive ? "text-white" : "group-hover:text-primary"
+                          )} />
+                          {!collapsed && (
+                            <span className="text-sm font-semibold whitespace-nowrap animate-in fade-in duration-300">
+                              {item.label}
+                            </span>
+                          )}
+                          {isActive && !collapsed && (
+                            <div className="absolute right-3 h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
+                          )}
+                        </Link>
+                      </TooltipTrigger>
+                      {collapsed && (
+                        <TooltipContent side="right" className="bg-slate-950 text-white border-none font-bold text-xs rounded-lg px-4 py-2">
+                          {item.label}
+                        </TooltipContent>
+                      )}
+                    </Tooltip>
+                  );
+                })}
+              </nav>
+            </div>
+          ))}
         </div>
-      </div>
-    </aside>
+
+        <div className="p-4 border-t space-y-4">
+          <Button
+            variant="outline"
+            className={cn(
+              "w-full rounded-xl border-dashed hover:border-primary hover:text-primary transition-all group",
+              collapsed ? "p-0 h-10" : "h-12"
+            )}
+            onClick={() => document.body.classList.toggle('presentation-mode')}
+          >
+            <Tv className={cn("h-4 w-4 shrink-0", !collapsed && "mr-2")} />
+            {!collapsed && <span className="text-xs font-bold uppercase tracking-wider">Exhibition Mode</span>}
+          </Button>
+          
+          {!collapsed && (
+            <div className="bg-secondary/30 rounded-2xl p-4 border border-border/50 animate-in fade-in slide-in-from-bottom-2 duration-700">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
+                <span className="text-[10px] font-black uppercase tracking-widest">System Health</span>
+              </div>
+              <p className="text-[10px] text-muted-foreground leading-relaxed font-medium">
+                Regional datasets synchronized. 1.2TB of new telemetry processed.
+              </p>
+            </div>
+          )}
+        </div>
+      </aside>
+    </TooltipProvider>
   );
 }
