@@ -1,10 +1,12 @@
+
 import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
+import Sidebar from '@/components/Sidebar';
 
 export const metadata: Metadata = {
-  title: 'New Project',
-  description: 'Built with Next.js and Firebase Studio',
+  title: 'EcoSystem AI | Global Intelligence Platform',
+  description: 'AI-driven sustainability, energy, and bio-health predictive dashboard.',
 };
 
 export default function RootLayout({
@@ -22,8 +24,11 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="font-body antialiased bg-background min-h-screen flex flex-col">
-        <main className="flex-grow">{children}</main>
+      <body className="font-body antialiased bg-background min-h-screen flex">
+        <Sidebar />
+        <main className="flex-grow p-8 overflow-auto">
+          {children}
+        </main>
         <Toaster />
       </body>
     </html>

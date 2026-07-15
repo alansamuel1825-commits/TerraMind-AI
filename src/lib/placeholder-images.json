@@ -1,3 +1,16 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "agri-sat",
+      "description": "Satellite view of farm",
+      "imageUrl": "https://picsum.photos/seed/farm/800/450",
+      "imageHint": "satellite farm"
+    },
+    {
+      "id": "global-map",
+      "description": "Sustainability heatmap",
+      "imageUrl": "https://picsum.photos/seed/map/800/400",
+      "imageHint": "world map"
+    }
+  ]
 }
