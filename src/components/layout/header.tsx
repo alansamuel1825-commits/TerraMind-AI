@@ -1,4 +1,3 @@
-
 "use client";
 
 import { 
@@ -21,23 +20,25 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "@/avatar"; // Corrected import path alias in use? No, standard is @/components/ui/avatar
-import { Avatar as AvatarUI, AvatarFallback as AvatarFallbackUI, AvatarImage as AvatarImageUI } from "@/components/ui/avatar";
+import { 
+  Avatar, 
+  AvatarFallback, 
+  AvatarImage 
+} from "@/components/ui/avatar";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect, useMemo } from "react";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/components/LanguageProvider";
-import { Language } from "@/lib/translations";
 
 const SEARCH_SOURCES = [
-  { label: 'Strategic Hub', href: '/executive' },
+  { label: 'Executive Command', href: '/executive' },
   { label: 'Agriculture Intelligence', href: '/agri' },
   { label: 'Circular Economy', href: '/circular' },
-  { label: 'Smart Grid', href: '/energy' },
-  { label: 'Digital Twin', href: '/smart-city' },
+  { label: 'Green Energy', href: '/energy' },
+  { label: 'Smart City Twin', href: '/smart-city' },
   { label: 'Public Health', href: '/health' },
   { label: 'AI Assistant', href: '/ai' },
-  { label: 'System Configuration', href: '/settings' },
+  { label: 'System Settings', href: '/settings' },
 ];
 
 export default function Header() {
@@ -112,7 +113,7 @@ export default function Header() {
           {showSearchBox && searchQuery && (
             <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-900 border rounded-2xl shadow-2xl overflow-hidden animate-in fade-in slide-in-from-top-2">
               <div className="p-2 border-b bg-secondary/30 flex items-center justify-between">
-                <span className="text-[10px] font-bold uppercase px-2 text-muted-foreground">Results</span>
+                <span className="text-[10px] font-bold uppercase px-2 text-muted-foreground">Intelligence Nodes</span>
                 <Button variant="ghost" size="icon" className="h-5 w-5" onClick={() => setShowSearchBox(false)}>
                   <X className="h-3 w-3" />
                 </Button>
@@ -172,13 +173,13 @@ export default function Header() {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-80 p-0 rounded-2xl overflow-hidden border-none shadow-2xl">
             <div className="p-4 bg-primary text-white">
-              <h3 className="font-bold text-sm">System Intelligence</h3>
-              <p className="text-[10px] opacity-80 uppercase tracking-widest font-bold">3 Active Alerts</p>
+              <h3 className="font-bold text-sm">Neural Alerts</h3>
+              <p className="text-[10px] opacity-80 uppercase tracking-widest font-bold">3 Operational Signals</p>
             </div>
             <div className="p-2 space-y-1">
-              <NotificationItem title="Grid Deviation" time="2m ago" type="warning" />
-              <NotificationItem title="Soil Calibration Ready" time="15m ago" type="info" />
-              <NotificationItem title="Net-Zero Target Hit" time="1h ago" type="success" />
+              <NotificationItem title="Peak Load Predicted" time="2m ago" type="warning" />
+              <NotificationItem title="Soil Telemetry Online" time="15m ago" type="info" />
+              <NotificationItem title="Carbon Target Reached" time="1h ago" type="success" />
             </div>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -186,24 +187,23 @@ export default function Header() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <div className="flex items-center gap-3 cursor-pointer group pl-2">
-              <AvatarUI className="h-9 w-9 ring-2 ring-transparent group-hover:ring-primary/30 transition-all shadow-md">
-                <AvatarImageUI src="https://picsum.photos/seed/director/100/100" />
-                <AvatarFallbackUI className="bg-slate-900 text-white text-xs">DIR</AvatarFallbackUI>
-              </AvatarUI>
+              <Avatar className="h-9 w-9 ring-2 ring-transparent group-hover:ring-primary/30 transition-all shadow-md">
+                <AvatarImage src="https://picsum.photos/seed/director/100/100" />
+                <AvatarFallback className="bg-slate-900 text-white text-xs">DIR</AvatarFallback>
+              </Avatar>
               <div className="hidden xl:flex flex-col items-start leading-none">
                 <span className="text-xs font-black uppercase tracking-tighter">Director Alpha</span>
-                <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest mt-1 opacity-60">Global Access</span>
+                <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest mt-1 opacity-60">Command Access</span>
               </div>
             </div>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56 rounded-xl border shadow-2xl">
-            <DropdownMenuLabel className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Command Center</DropdownMenuLabel>
+            <DropdownMenuLabel className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">User Session</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-xs font-semibold py-2">Profile & Bio-ID</DropdownMenuItem>
-            <DropdownMenuItem className="text-xs font-semibold py-2">Neural Link Settings</DropdownMenuItem>
-            <DropdownMenuItem className="text-xs font-semibold py-2">Regional Controls</DropdownMenuItem>
+            <DropdownMenuItem className="text-xs font-semibold py-2">Profile Matrix</DropdownMenuItem>
+            <DropdownMenuItem className="text-xs font-semibold py-2">Neural Preferences</DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-xs font-bold text-destructive py-2">Terminate Session</DropdownMenuItem>
+            <DropdownMenuItem className="text-xs font-bold text-destructive py-2">Sign Out</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

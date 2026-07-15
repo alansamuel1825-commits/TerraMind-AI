@@ -1,4 +1,3 @@
-
 'use server';
 
 /**
@@ -6,7 +5,7 @@
  * 
  * - Handles conversational AI for sustainability.
  * - Integrates real-time TTS (Text-to-Speech).
- * - Uses tools to reference user data (Energy, Agri, Waste).
+ * - Uses Genkit Tools to reference personalized user data.
  */
 
 import { ai } from '@/ai/genkit';
@@ -22,6 +21,7 @@ const AssistantInputSchema = z.object({
     content: z.string(),
   })).optional(),
   voiceOutput: z.boolean().optional().describe('Whether to generate audio output.'),
+  userId: z.string().optional().describe('The ID of the user for personal context.'),
 });
 
 // Output Schema
@@ -33,13 +33,37 @@ const AssistantOutputSchema = z.object({
     reasoning: z.string(),
     recommendations: z.array(z.string()),
     confidence: z.number(),
+    limitations: z.string().optional(),
   }).optional(),
 });
 
 export type AssistantInput = z.infer<typeof AssistantInputSchema>;
 export type AssistantOutput = z.infer<typeof AssistantOutputSchema>;
 
-// Assistant Flow
+// Define Tools for Personalization
+const getSustainabilityContext = ai.defineTool(
+  {
+    name: 'getSustainabilityContext',
+    description: 'Retrieves the latest sustainability data for the user, including energy simulations, crop scans, and waste audits.',
+    inputSchema: z.object({
+      userId: z.string(),
+      module: z.enum(['agri', 'energy', 'waste', 'all']),
+    }),
+    outputSchema: z.string(),
+  },
+  async (input) => {
+    // In a production app, this would query Firestore.
+    // For this demonstration, we return personalized context based on the requested module.
+    const contexts = {
+      agri: "User's last crop scan was a Tomato plant (Solanum lycopersicum) diagnosed with Late Blight. Confidence: 94%. Yield impact: 20-40%.",
+      energy: "User's last energy simulation for a Commercial Office showed 92% efficiency. Solar potential is high (85kWh), but grid dependency remains at 15%.",
+      waste: "User's last waste classification identified Plastic (PET) with 92% confidence. It was recyclable and upcycling ideas included a self-watering planter.",
+      all: "User has active records in Agriculture (Tomato Late Blight), Energy (Commercial Office 92% efficiency), and Waste (PET Plastic classification)."
+    };
+    return contexts[input.module] || "No specific data found for this module.";
+  }
+);
+
 export async function terraMindChat(input: AssistantInput): Promise<AssistantOutput> {
   return chatFlow(input);
 }
@@ -51,22 +75,28 @@ const chatFlow = ai.defineFlow(
     outputSchema: AssistantOutputSchema,
   },
   async (input) => {
-    // 1. Generate text response
+    // 1. Generate text response with tool-aware reasoning
     const { output } = await ai.generate({
       system: `You are the TerraMind AI Intelligence Layer, a premium sustainability assistant.
       You provide expert guidance on agriculture, circular economy, energy, and smart cities.
-      You help the "Director" make data-driven decisions.
-      Distinguish clearly between simulated educational data and verified facts.
-      Keep your tone professional, encouraging, and highly technical.
-      Use structured sections in your output.`,
+      
+      PERSONALIZATION:
+      - If the user asks about 'my data', 'my last simulation', or 'what I scanned', use the getSustainabilityContext tool.
+      - Always prioritize information retrieved from tools when discussing user-specific history.
+      
+      TONE:
+      - Professional, encouraging, and technical.
+      - Distinguish clearly between simulated educational data and verified facts.
+      - Use structured sections in your output.`,
       prompt: input.message,
-      // In a real implementation, we would pass input.history to the prompt
+      tools: [getSustainabilityContext],
       output: {
         schema: z.object({
           text: z.string(),
           summary: z.string(),
           reasoning: z.string(),
           recommendations: z.array(z.string()),
+          limitations: z.string().optional(),
         })
       }
     });
@@ -74,27 +104,31 @@ const chatFlow = ai.defineFlow(
     const response = output!;
     let audioBase64 = '';
 
-    // 2. Optional TTS generation
+    // 2. Optional Neural TTS generation
     if (input.voiceOutput) {
-      const { media } = await ai.generate({
-        model: googleAI.model('gemini-2.5-flash-preview-tts'),
-        config: {
-          responseModalities: ['AUDIO'],
-          speechConfig: {
-            voiceConfig: {
-              prebuiltVoiceConfig: { voiceName: 'Algenib' },
+      try {
+        const { media } = await ai.generate({
+          model: googleAI.model('gemini-2.5-flash-preview-tts'),
+          config: {
+            responseModalities: ['AUDIO'],
+            speechConfig: {
+              voiceConfig: {
+                prebuiltVoiceConfig: { voiceName: 'Algenib' },
+              },
             },
           },
-        },
-        prompt: response.text,
-      });
+          prompt: response.text,
+        });
 
-      if (media) {
-        const audioBuffer = Buffer.from(
-          media.url.substring(media.url.indexOf(',') + 1),
-          'base64'
-        );
-        audioBase64 = 'data:audio/wav;base64,' + (await toWav(audioBuffer));
+        if (media) {
+          const audioBuffer = Buffer.from(
+            media.url.substring(media.url.indexOf(',') + 1),
+            'base64'
+          );
+          audioBase64 = 'data:audio/wav;base64,' + (await toWav(audioBuffer));
+        }
+      } catch (e) {
+        console.warn("TTS Generation failed, continuing with text-only.");
       }
     }
 
@@ -106,6 +140,7 @@ const chatFlow = ai.defineFlow(
         reasoning: response.reasoning,
         recommendations: response.recommendations,
         confidence: 0.98,
+        limitations: response.limitations,
       },
     };
   }
