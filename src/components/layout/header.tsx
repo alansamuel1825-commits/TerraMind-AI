@@ -4,12 +4,12 @@
 import { 
   Search, 
   Bell, 
-  Plus, 
   ChevronRight,
   Home,
   Zap,
   LayoutGrid,
-  X
+  X,
+  Languages
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,10 +21,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/avatar"; // Corrected import path alias in use? No, standard is @/components/ui/avatar
+import { Avatar as AvatarUI, AvatarFallback as AvatarFallbackUI, AvatarImage as AvatarImageUI } from "@/components/ui/avatar";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect, useMemo } from "react";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/components/LanguageProvider";
+import { Language } from "@/lib/translations";
 
 const SEARCH_SOURCES = [
   { label: 'Strategic Hub', href: '/executive' },
@@ -45,6 +48,8 @@ export default function Header() {
   const [isPresentation, setIsPresentation] = useState(false);
   const [searchQuery, setSearchTerm] = useState("");
   const [showSearchBox, setShowSearchBox] = useState(false);
+  
+  const { language, setLanguage, t } = useLanguage();
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -94,7 +99,7 @@ export default function Header() {
         <div className="relative group hidden lg:block">
           <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground transition-colors group-focus-within:text-primary" />
           <Input 
-            placeholder="Search intelligence nodes..." 
+            placeholder={t.common.search}
             value={searchQuery}
             onChange={(e) => {
               setSearchTerm(e.target.value);
@@ -136,10 +141,25 @@ export default function Header() {
       </div>
 
       <div className="flex items-center gap-4">
+        {/* Language Switcher */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="sm" className="h-9 px-3 rounded-full text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:bg-primary/5 hover:text-primary">
+              <Languages className="h-4 w-4 mr-2" />
+              {language.toUpperCase()}
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-32 rounded-xl">
+            <DropdownMenuItem onClick={() => setLanguage('en')}>English</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setLanguage('hi')}>हिन्दी (Hindi)</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setLanguage('ta')}>தமிழ் (Tamil)</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+
         <div className="hidden sm:flex items-center gap-2 pr-4 border-r mr-2">
           <Button variant="ghost" size="sm" className="h-8 px-3 rounded-full text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:bg-primary/5 hover:text-primary">
             <Zap className="h-3 w-3 mr-2 text-amber-500" />
-            Live Sync
+            {t.common.liveSync}
           </Button>
         </div>
 
@@ -160,23 +180,16 @@ export default function Header() {
               <NotificationItem title="Soil Calibration Ready" time="15m ago" type="info" />
               <NotificationItem title="Net-Zero Target Hit" time="1h ago" type="success" />
             </div>
-            <div className="p-3 border-t text-center">
-              <Button variant="ghost" className="w-full h-8 text-[10px] font-black uppercase tracking-widest text-primary">View All Logs</Button>
-            </div>
           </DropdownMenuContent>
         </DropdownMenu>
-
-        <Button variant="ghost" size="icon" className="text-muted-foreground rounded-full hover:bg-secondary">
-          <LayoutGrid className="h-5 w-5" />
-        </Button>
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <div className="flex items-center gap-3 cursor-pointer group pl-2">
-              <Avatar className="h-9 w-9 ring-2 ring-transparent group-hover:ring-primary/30 transition-all shadow-md">
-                <AvatarImage src="https://picsum.photos/seed/director/100/100" />
-                <AvatarFallback className="bg-slate-900 text-white text-xs">DIR</AvatarFallback>
-              </Avatar>
+              <AvatarUI className="h-9 w-9 ring-2 ring-transparent group-hover:ring-primary/30 transition-all shadow-md">
+                <AvatarImageUI src="https://picsum.photos/seed/director/100/100" />
+                <AvatarFallbackUI className="bg-slate-900 text-white text-xs">DIR</AvatarFallbackUI>
+              </AvatarUI>
               <div className="hidden xl:flex flex-col items-start leading-none">
                 <span className="text-xs font-black uppercase tracking-tighter">Director Alpha</span>
                 <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest mt-1 opacity-60">Global Access</span>

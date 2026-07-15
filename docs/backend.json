@@ -34,6 +34,29 @@
         "efficiencyRating": { "type": "number" },
         "timestamp": { "type": "number" }
       }
+    },
+    "WasteAnalysis": {
+      "title": "Waste Classification",
+      "description": "AI-powered waste sorting results.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "category": { "type": "string" },
+        "isRecyclable": { "type": "boolean" },
+        "confidence": { "type": "number" },
+        "timestamp": { "type": "number" }
+      }
+    },
+    "CitySimulation": {
+      "title": "Smart City Simulation",
+      "description": "Digital twin scenario parameters.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "name": { "type": "string" },
+        "sustainabilityScore": { "type": "number" },
+        "timestamp": { "type": "number" }
+      }
     }
   },
   "auth": {
@@ -51,6 +74,18 @@
     "/energy_simulations/{simId}": {
       "schema": "#/backend/entities/EnergySimulation",
       "description": "Stores building load simulations."
+    },
+    "/waste_analyses/{analysisId}": {
+      "schema": "#/backend/entities/WasteAnalysis",
+      "description": "Stores waste classification history."
+    },
+    "/city_simulations/{simId}": {
+      "schema": "#/backend/entities/CitySimulation",
+      "description": "Stores smart city scenario data."
+    },
+    "/environmental_reports/{reportId}": {
+      "schema": "object",
+      "description": "Stores environmental indicator reports."
     },
     "/chat_threads/{threadId}": {
       "schema": "object",

@@ -11,13 +11,11 @@ import {
   Recycle, 
   Zap, 
   Building2, 
-  CloudRain, 
   HeartPulse, 
   Leaf, 
   BarChart3, 
   Sparkles, 
   FileText, 
-  BookOpen, 
   Settings,
   ChevronLeft,
   ChevronRight,
@@ -27,32 +25,34 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-
-const navItems = [
-  { group: "Core Intelligence", items: [
-    { href: "/", label: "Overview", icon: LayoutDashboard },
-    { href: "/executive", label: "Strategic Hub", icon: ShieldCheck },
-    { href: "/agri", label: "Agriculture", icon: Sprout },
-    { href: "/circular", label: "Circular Waste", icon: Recycle },
-    { href: "/energy", label: "Energy Grid", icon: Zap },
-    { href: "/smart-city", label: "Digital Twin", icon: Building2 },
-  ]},
-  { group: "Deep Analysis", items: [
-    { href: "/health", label: "Bio-Health", icon: HeartPulse },
-    { href: "/environment", label: "Ecosystems", icon: Leaf },
-    { href: "/analytics", label: "Global Trends", icon: BarChart3 },
-  ]},
-  { group: "Collaboration", items: [
-    { href: "/ai", label: "Neural Assistant", icon: Sparkles },
-    { href: "/reports", label: "Audit Logs", icon: FileText },
-    { href: "/settings", label: "System Config", icon: Settings },
-  ]}
-];
+import { useLanguage } from "@/components/LanguageProvider";
 
 export default function Sidebar() {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
   const [isPresentation, setIsPresentation] = useState(false);
+  const { t } = useLanguage();
+
+  const navItems = [
+    { group: "Core Intelligence", items: [
+      { href: "/", label: t.nav.dashboard, icon: LayoutDashboard },
+      { href: "/executive", label: t.nav.executive, icon: ShieldCheck },
+      { href: "/agri", label: t.nav.agri, icon: Sprout },
+      { href: "/circular", label: t.nav.circular, icon: Recycle },
+      { href: "/energy", label: t.nav.energy, icon: Zap },
+      { href: "/smart-city", label: t.nav.smartCity, icon: Building2 },
+    ]},
+    { group: "Deep Analysis", items: [
+      { href: "/health", label: t.nav.health, icon: HeartPulse },
+      { href: "/environment", label: t.nav.environment, icon: Leaf },
+      { href: "/analytics", label: t.nav.analytics, icon: BarChart3 },
+    ]},
+    { group: "Collaboration", items: [
+      { href: "/ai", label: t.nav.ai, icon: Sparkles },
+      { href: "/reports", label: t.nav.reports, icon: FileText },
+      { href: "/settings", label: t.nav.settings, icon: Settings },
+    ]}
+  ];
 
   useEffect(() => {
     const checkPresentation = () => {
@@ -126,9 +126,6 @@ export default function Sidebar() {
                               {item.label}
                             </span>
                           )}
-                          {isActive && !collapsed && (
-                            <div className="absolute right-3 h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
-                          )}
                         </Link>
                       </TooltipTrigger>
                       {collapsed && (
@@ -154,17 +151,17 @@ export default function Sidebar() {
             onClick={() => document.body.classList.toggle('presentation-mode')}
           >
             <Tv className={cn("h-4 w-4 shrink-0", !collapsed && "mr-2")} />
-            {!collapsed && <span className="text-xs font-bold uppercase tracking-wider">Exhibition Mode</span>}
+            {!collapsed && <span className="text-xs font-bold uppercase tracking-wider">{t.nav.presentation}</span>}
           </Button>
           
           {!collapsed && (
             <div className="bg-secondary/30 rounded-2xl p-4 border border-border/50 animate-in fade-in slide-in-from-bottom-2 duration-700">
               <div className="flex items-center gap-2 mb-2">
                 <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
-                <span className="text-[10px] font-black uppercase tracking-widest">System Health</span>
+                <span className="text-[10px] font-black uppercase tracking-widest">{t.common.systemHealth}</span>
               </div>
               <p className="text-[10px] text-muted-foreground leading-relaxed font-medium">
-                Regional datasets synchronized. 1.2TB of new telemetry processed.
+                Regional datasets synchronized.
               </p>
             </div>
           )}

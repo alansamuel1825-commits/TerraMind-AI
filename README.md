@@ -1,3 +1,4 @@
+
 # TerraMind AI | Global Sustainability Intelligence
 
 TerraMind AI is a premium, high-fidelity sustainability dashboard and predictive intelligence platform designed for urban planners, environmental scientists, and executive decision-makers.
@@ -11,27 +12,26 @@ To provide a unified intelligence layer for planetary resilience, correlating ag
 - **Styling**: Tailwind CSS
 - **Components**: ShadCN UI + Lucide Icons
 - **Backend**: Firebase (Firestore, Authentication, Storage)
-- **AI Engine**: Genkit (Ready for Gemini Pro/Vision integration)
+- **AI Engine**: Genkit (Gemini-ready architecture)
 - **Analytics**: Recharts (Enterprise-grade visualization)
 
 ## 📦 Key Modules
-1. **Strategic Hub (Executive)**: Aggregated sustainability scores and global resilience indexing.
-2. **Agriculture Intelligence**: AI-powered crop pathology and soil genome sequencing simulation.
+1. **Executive Hub**: Aggregated sustainability scores and global resilience indexing.
+2. **Agriculture Intelligence**: AI crop pathology and soil genome sequencing simulation.
 3. **Circular Economy**: Material classification and thermodynamic upcycling routing.
 4. **Energy Grid**: Smart-grid load balancing and renewable forecasting.
 5. **Smart City Digital Twin**: Real-time urban planning simulation with climate stress testing.
 6. **Public Health**: Environmental indicator tracking and respiratory/heat risk awareness.
 
-## 🏗 Architecture Overview
-- **Enterprise-ready folder structure**: 
-  - `/src/app`: Page routes and layouts.
-  - `/src/components`: Atomic and module-specific UI components.
-  - `/src/lib`: Type definitions, mock data, and utility functions.
-  - `/src/firebase`: Client-side SDK configuration and Firestore service layers.
-- **Explainable AI (XAI)**: Grounded in SHAP/LIME logic placeholders to ensure transparency in predictive modeling.
+## 🏗 Project Structure
+- `src/app`: Page routes and layouts.
+- `src/components`: UI components (Atomic, Layout, Module-specific).
+- `src/firebase`: Client-side SDK configuration and hook-based service layers.
+- `src/lib`: Data types, mock data, and utility functions.
+- `docs/backend.json`: Blueprint for data entities and Firestore structure.
 
 ## 🚦 Deployment
-Designed for seamless deployment on **Vercel** and **Firebase App Hosting**. 
+Designed for seamless deployment on **Vercel** and **Firebase App Hosting**.
 
 1. Create a Firebase project.
 2. Enable Firestore, Auth, and Storage.
