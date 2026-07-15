@@ -2,10 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import Image from "next/image";
 import type { Candidate } from "@/lib/data";
 import CandidateCard from "./CandidateCard";
 import { Button } from "./ui/button";
-import { Check, Vote } from "lucide-react";
+import { Check } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 
 interface VotingFormProps {
@@ -98,7 +99,14 @@ export default function VotingForm({
             onClick={handleSubmit}
             disabled={!isVoteReady}
           >
-            <Vote className="mr-3 h-6 w-6"/>
+            <div className="mr-3 relative w-8 h-8">
+                <Image 
+                    src="/logo.png" 
+                    alt="Logo" 
+                    fill 
+                    className="object-contain"
+                />
+            </div>
             Submit Final Vote
           </Button>
         </div>
