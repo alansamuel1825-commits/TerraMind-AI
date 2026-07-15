@@ -1,11 +1,10 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
-import Header from '@/components/Header';
 
 export const metadata: Metadata = {
-  title: 'The Study - School Elections',
-  description: 'Online Voting System for The Study International School',
+  title: 'New Project',
+  description: 'Built with Next.js and Firebase Studio',
 };
 
 export default function RootLayout({
@@ -23,11 +22,8 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="font-body antialiased bg-background">
-        <div className="flex flex-col min-h-screen">
-          <Header />
-          <main className="flex-grow">{children}</main>
-        </div>
+      <body className="font-body antialiased bg-background min-h-screen flex flex-col">
+        <main className="flex-grow">{children}</main>
         <Toaster />
       </body>
     </html>
