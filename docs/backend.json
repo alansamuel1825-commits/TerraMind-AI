@@ -1,0 +1,60 @@
+
+{
+  "entities": {
+    "UserProfile": {
+      "title": "User Profile",
+      "description": "User account information and permissions.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "role": { "type": "string", "enum": ["director", "analyst"] },
+        "name": { "type": "string" }
+      }
+    },
+    "AgriAnalysis": {
+      "title": "Agriculture Analysis",
+      "description": "Captured crop health analysis data.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "plantName": { "type": "string" },
+        "isHealthy": { "type": "boolean" },
+        "confidence": { "type": "number" },
+        "imageUrl": { "type": "string" },
+        "timestamp": { "type": "number" }
+      }
+    },
+    "EnergySimulation": {
+      "title": "Energy Grid Simulation",
+      "description": "Saved building energy load profiles.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "buildingType": { "type": "string" },
+        "efficiencyRating": { "type": "number" },
+        "timestamp": { "type": "number" }
+      }
+    }
+  },
+  "auth": {
+    "providers": ["google.com", "password"]
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "#/backend/entities/UserProfile",
+      "description": "Stores core user metadata."
+    },
+    "/agri_analyses/{analysisId}": {
+      "schema": "#/backend/entities/AgriAnalysis",
+      "description": "Stores history of agricultural health scans."
+    },
+    "/energy_simulations/{simId}": {
+      "schema": "#/backend/entities/EnergySimulation",
+      "description": "Stores building load simulations."
+    },
+    "/chat_threads/{threadId}": {
+      "schema": "object",
+      "description": "Stores AI assistant conversation threads."
+    }
+  }
+}

@@ -4,14 +4,12 @@
 import { 
   Search, 
   Bell, 
-  Moon, 
-  Sun, 
   Plus, 
   ChevronRight,
   Home,
-  Menu,
   Zap,
-  LayoutGrid
+  LayoutGrid,
+  X
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -24,15 +22,29 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { usePathname } from "next/navigation";
-import { useState, useEffect } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useState, useEffect, useMemo } from "react";
 import { cn } from "@/lib/utils";
+
+const SEARCH_SOURCES = [
+  { label: 'Strategic Hub', href: '/executive' },
+  { label: 'Agriculture Intelligence', href: '/agri' },
+  { label: 'Circular Economy', href: '/circular' },
+  { label: 'Smart Grid', href: '/energy' },
+  { label: 'Digital Twin', href: '/smart-city' },
+  { label: 'Public Health', href: '/health' },
+  { label: 'AI Assistant', href: '/ai' },
+  { label: 'System Configuration', href: '/settings' },
+];
 
 export default function Header() {
   const pathname = usePathname();
+  const router = useRouter();
   const segments = pathname === "/" ? ["Dashboard"] : pathname.split("/").filter(Boolean);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isPresentation, setIsPresentation] = useState(false);
+  const [searchQuery, setSearchTerm] = useState("");
+  const [showSearchBox, setShowSearchBox] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -48,11 +60,16 @@ export default function Header() {
     };
   }, []);
 
+  const filteredResults = useMemo(() => {
+    if (!searchQuery) return [];
+    return SEARCH_SOURCES.filter(s => s.label.toLowerCase().includes(searchQuery.toLowerCase()));
+  }, [searchQuery]);
+
   if (isPresentation) return null;
 
   return (
     <header className={cn(
-      "h-18 sticky top-0 z-30 px-8 flex items-center justify-between transition-all duration-300",
+      "h-18 sticky top-0 z-50 px-8 flex items-center justify-between transition-all duration-300",
       isScrolled ? "bg-background/80 backdrop-blur-xl border-b shadow-sm h-16" : "bg-transparent h-20"
     )}>
       <div className="flex items-center gap-8">
@@ -77,9 +94,44 @@ export default function Header() {
         <div className="relative group hidden lg:block">
           <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground transition-colors group-focus-within:text-primary" />
           <Input 
-            placeholder="Search resilience data..." 
+            placeholder="Search intelligence nodes..." 
+            value={searchQuery}
+            onChange={(e) => {
+              setSearchTerm(e.target.value);
+              setShowSearchBox(true);
+            }}
+            onFocus={() => setShowSearchBox(true)}
             className="pl-10 w-[300px] bg-secondary/40 border-none h-9 text-xs rounded-xl focus-visible:ring-primary focus-visible:bg-secondary/60 transition-all"
           />
+
+          {showSearchBox && searchQuery && (
+            <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-900 border rounded-2xl shadow-2xl overflow-hidden animate-in fade-in slide-in-from-top-2">
+              <div className="p-2 border-b bg-secondary/30 flex items-center justify-between">
+                <span className="text-[10px] font-bold uppercase px-2 text-muted-foreground">Results</span>
+                <Button variant="ghost" size="icon" className="h-5 w-5" onClick={() => setShowSearchBox(false)}>
+                  <X className="h-3 w-3" />
+                </Button>
+              </div>
+              <div className="max-h-60 overflow-y-auto">
+                {filteredResults.length > 0 ? filteredResults.map((r) => (
+                  <button 
+                    key={r.href}
+                    onClick={() => {
+                      router.push(r.href);
+                      setShowSearchBox(false);
+                      setSearchTerm("");
+                    }}
+                    className="w-full text-left px-4 py-3 hover:bg-primary/5 transition-colors text-xs font-semibold flex items-center gap-3"
+                  >
+                    <LayoutGrid className="h-3 w-3 text-primary" />
+                    {r.label}
+                  </button>
+                )) : (
+                  <div className="p-4 text-center text-xs text-muted-foreground italic">No matching nodes found</div>
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 

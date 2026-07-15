@@ -20,10 +20,8 @@ import {
   Wind, 
   AlertTriangle, 
   Droplets,
-  ArrowRight,
   Plus,
   Play,
-  FileText,
   Sparkles,
   Map as MapIcon,
   Circle,
@@ -31,7 +29,8 @@ import {
   X,
   ChevronRight,
   TrendingUp,
-  Database
+  Database,
+  LayoutDashboard
 } from "lucide-react";
 import { 
   AreaChart, 
@@ -66,11 +65,15 @@ const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444'];
 export default function Dashboard() {
   const [showTour, setShowTour] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [hasMounted, setHasMounted] = useState(false);
 
   useEffect(() => {
+    setHasMounted(true);
     const timer = setTimeout(() => setIsLoading(false), 800);
     return () => clearTimeout(timer);
   }, []);
+
+  if (!hasMounted) return null;
 
   if (isLoading) {
     return (
@@ -351,7 +354,7 @@ export default function Dashboard() {
                   <X className="h-5 w-5" />
                 </Button>
                 <div className="p-3 bg-white/20 rounded-2xl w-fit backdrop-blur-xl">
-                  <Globe className="h-8 w-8" />
+                  <Activity className="h-8 w-8" />
                 </div>
                 <h2 className="text-4xl font-black tracking-tighter italic">TerraMind Director's Tour</h2>
                 <p className="text-sm font-medium opacity-80 leading-relaxed">Welcome to the future of planetary management. Let's explore your command center.</p>
