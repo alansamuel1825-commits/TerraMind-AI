@@ -141,7 +141,7 @@ export default function Dashboard() {
 
       {/* KPI Dynamic Grid */}
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        {dashboardKPIs.map((metric, idx) => (
+        {(dashboardKPIs ?? []).map((metric, idx) => (
           <div key={metric.id} className="animate-in fade-in slide-in-from-bottom-4 duration-500" style={{ animationDelay: `${idx * 100}ms` }}>
             <KPICard 
               metric={metric} 
@@ -212,7 +212,7 @@ export default function Dashboard() {
                     dataKey="value"
                     stroke="none"
                   >
-                    {wasteDistributionData.map((entry, index) => (
+                    {(wasteDistributionData ?? []).map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} className="outline-none focus:outline-none" />
                     ))}
                   </Pie>
