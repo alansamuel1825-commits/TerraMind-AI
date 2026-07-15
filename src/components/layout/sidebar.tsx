@@ -21,13 +21,15 @@ import {
   Settings,
   ChevronLeft,
   ChevronRight,
-  Globe
+  Globe,
+  ShieldCheck
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const navItems = [
   { group: "Core", items: [
     { href: "/", label: "Dashboard", icon: LayoutDashboard },
+    { href: "/executive", label: "Executive Intelligence", icon: ShieldCheck },
     { href: "/agri", label: "Agriculture Intelligence", icon: Sprout },
     { href: "/circular", label: "Circular Economy", icon: Recycle },
     { href: "/energy", label: "Green Energy", icon: Zap },
