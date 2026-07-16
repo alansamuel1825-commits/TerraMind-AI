@@ -48,3 +48,50 @@ export const recentActivity = [
   { id: 2, action: 'Sensor Calibration', target: 'Water Quality - Plot B', time: '45m ago' },
   { id: 3, action: 'Data Upload', target: 'Satellite Imagery Batch #42', time: '2h ago' },
 ];
+export const agriMetrics: SystemMetric[] = [
+  {
+    id: "soil",
+    label: "Soil Health",
+    value: 91,
+    change: 3.2,
+    trend: "up",
+    unit: "%",
+    history: [
+      { value: 82 },
+      { value: 84 },
+      { value: 87 },
+      { value: 89 },
+      { value: 91 },
+    ],
+  },
+  {
+    id: "water",
+    label: "Water Efficiency",
+    value: 88,
+    change: 1.5,
+    trend: "up",
+    unit: "%",
+    history: [
+      { value: 80 },
+      { value: 82 },
+      { value: 84 },
+      { value: 86 },
+      { value: 88 },
+    ],
+  },
+  {
+    id: "yield",
+    label: "Yield Prediction",
+    value: 95,
+    change: 2.8,
+    trend: "up",
+    unit: "%",
+    history: [
+      { value: 86 },
+      { value: 88 },
+      { value: 90 },
+      { value: 93 },
+      { value: 95 },
+    ],
+  },
+];
